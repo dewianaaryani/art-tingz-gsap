@@ -1,26 +1,119 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Regular";
+  src: url("/fonts/Bellefair/Bellefair-Regular.ttf");
+}
+@font-face {
+  font-family: "Humane-Semibold";
+  src: url("/fonts/humane/Humane-Semibold.ttf");
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #010101;
+  --foreground: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --font-regular: "Regular";
+  --font-humane-semibold: "Humane-Semibold";
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #000000;
     --foreground: #ededed;
   }
 }
 
+html {
+  width: 100vw;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
+  width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-regular);
+  
+}
+
+
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+
+@utility flex-between {
+  @apply flex items-center justify-between;
+}
+
+@utility col-between {
+  @apply flex flex-col items-center justify-between;
+}
+
+@utility col-center {
+  @apply flex flex-col items-center justify-center;
+}
+@utility flex-end {
+  @apply flex items-end justify-end;
+}
+@utility text-large-max{
+  @apply text-4xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-8xl uppercase;
+}
+
+
+
+@layer components {
+   .bg-image {
+        @apply absolute inset-0 size-full bg-[url("/images/hero.png")];
+    }
+  header {
+    @apply w-screen fixed top-0 left-0 z-50 flex-center min-h-[7vh];
+
+    nav {
+      @apply container mx-auto flex-center px-0 md:px-5 2xl:px-0;
+
+      ul {
+        @apply w-full flex-end  md:flex-center md:gap-12;
+
+        a {
+          @apply hidden md:block text-white opacity-80 font-regular text-xl cursor-pointer hover:opacity-100 transition-all duration-300 ease-in-out py-10 uppercase;
+        }
+        .hamburger-menu {
+          @apply  md:hidden flex-end px-5;
+        }
+        
+      }
+    }
+  }
+  #hero {
+  @apply h-[55vh] md:h-screen  col-center  overflow-hidden;
+
+  
+  .image-hero {
+    @apply  absolute md:inset-y-0 w-64 h-46 md:w-full md:h-full max-w-350 md:max-h-140 xl:max-h-160 2xl:max-h-200 object-cover p-0 md:px-36;
+  }
+    .text-hero {
+      @apply relative  z-10 flex flex-col w-full md:mt-0 mt-22 md:flex-between px-6 md:px-16 gap-2;
+      .hero-left-text {
+        @apply w-1/4 md:w-1/2 lg:w-1/2 2xl:w-1/4 mr-auto;
+      }
+       .hero-right-text {
+        @apply w-3/4  md:w-1/2 lg:w-1/2 2xl:w-1/4 ml-auto;
+      }
+
+      h1 {  
+        @apply text-large-max w-full;
+      }
+
+    }
+  }
 }
