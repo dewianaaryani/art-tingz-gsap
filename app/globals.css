@@ -8,7 +8,10 @@
   font-family: "Humane-Semibold";
   src: url("/fonts/humane/Humane-Semibold.ttf");
 }
-
+@font-face{
+  font-family: 'Poppins-Light';
+  src: url('/fonts/Poppins/Poppins-Light.ttf');
+}
 :root {
   --background: #010101;
   --foreground: #ffffff;
@@ -19,6 +22,7 @@
   --color-foreground: var(--foreground);
   --font-regular: "Regular";
   --font-humane-semibold: "Humane-Semibold";
+  --font-poppins-light: "Poppins-Light";
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
@@ -73,8 +77,9 @@ body {
 
 @layer components {
    .bg-image {
-        @apply absolute inset-0 size-full bg-[url("/images/hero.png")];
-    }
+    @apply min-h-screen bg-[url("/images/hero.png")] bg-cover bg-no-repeat bg-top;
+  }
+
   header {
     @apply w-screen fixed top-0 left-0 z-50 flex-center min-h-[7vh];
 
@@ -95,7 +100,7 @@ body {
     }
   }
   #hero {
-  @apply h-[55vh] md:h-screen  col-center  overflow-hidden;
+  @apply min-h-screen md:h-screen  col-center  overflow-hidden;
 
   
   .image-hero {
@@ -114,6 +119,84 @@ body {
         @apply text-large-max w-full;
       }
 
+    }
+  }
+  #about {
+    @apply h-fit max-h-screen relative items-center justify-center flex flex-col gap-12 w-full overflow-hidden px-0 md:px-16 pt-12;
+    .upper-content {
+      @apply flex flex-col md:flex-row md:items-center gap-12 md:gap-18 w-full p-6;
+    }
+    .statue-title {
+      @apply relative flex z-10 text-large-max leading-tight tracking-wide max-w-sm md:max-w-md;
+    }
+    .statue-frame {
+    @apply relative flex-1 z-13 ml-auto md:ml-auto md:mr-auto max-w-3xs md:max-w-md lg:max-w-lg min-w-xs md:min-w-sm;
+      .statue-image {
+      @apply relative object-cover grayscale contrast-125 px-4 py-12 md:py-0;
+      }
+      .frame-line {
+        @apply absolute bg-white/60;
+      }
+
+      .frame-line.top {
+        @apply top-0 left-4 h-px w-full;
+      }
+
+      .frame-line.bottom {
+        @apply bottom-0 -left-6 h-px w-full;
+      }
+
+      .frame-line.left {
+        @apply top-4 left-0 w-px h-full;
+      }
+
+      .frame-line.right {
+        @apply -top-6 right-0 w-px h-full;
+      }
+
+   }
+    
+    .bg-box {
+      @apply absolute top-0 left-0 md:left-14 w-full h-full;
+      .left-box {
+        @apply absolute z-8 top-0 left-0 w-1/2 md:w-1/6 h-full bg-black;
+      }
+      .middle-box {
+        @apply absolute z-6 top-32 md:top-18 left-0 w-sm md:w-full max-w-md md:max-w-full h-1/2 md:h-1/4 bg-black/50;
+      }
+    }
+
+    
+    
+    .statue-description {
+      @apply relative z-10 bg-black w-full text-lg text-white/80 leading-relaxed font-poppins-light p-8 md:pt-16 top-0 md:-top-24;
+    } 
+  }
+  #events {
+    @apply min-h-screen flex flex-col justify-center p-8 gap-6;
+    h1 {
+      @apply text-large-max underline-offset-2;
+    }
+    .event-section {
+      @apply flex flex-col gap-4 w-full;
+      .event-item {
+        @apply relative w-full h-62 overflow-hidden;
+      }
+      .text-event-detail {
+        @apply absolute bottom-8 left-6 z-10 flex-center gap-6;
+      }
+      img {
+        @apply w-full h-full object-cover;
+      }
+      h2{
+        @apply text-4xl;
+      }
+      h3{
+        @apply text-xl;
+      }
+      .img-gradient {
+       @apply absolute inset-0 bg-linear-to-t from-black/80 via-black/60 to-transparent 
+      }
     }
   }
 }
