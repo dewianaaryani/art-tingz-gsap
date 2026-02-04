@@ -1,9 +1,24 @@
 "use client";
 import { UpcomingEvents } from "@/constant";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function Events() {
+  const eventRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const totalEvents = UpcomingEvents.length;
+  const gotToSlide = (index: number) => {
+    const newIndex = (index + totalEvents) % totalEvents;
+    setCurrentIndex(newIndex);
+  };
+  const getEventAt = (indexOffset: number) => {
+    return UpcomingEvents[
+      (currentIndex + indexOffset + totalEvents) % totalEvents
+    ];
+  };
+  const progressBar = ((currentIndex + 1) / totalEvents) * 100;
+  const currentEvent = getEventAt(0);
   //upcoming random date but not more than 7 days
   const randomFutureDate = () => {
     const now = new Date();
@@ -44,26 +59,54 @@ export default function Events() {
     <section id="events">
       <h1>Upcoming Events</h1>
       <div className="event-section">
-        {UpcomingEvents.map((event, index) => (
-          <div key={event.id} className="event-item">
-            <div className="text-event-detail">
-              <h2>{index + 1}</h2>
-              <div className="flex flex-col">
-                <h3>{event.title}</h3>
-                {/* count down */}
-                <p>{countdown}</p>
-              </div>
+        <div ref={eventRef} className="event-item">
+          <div className="text-event-detail">
+            <h2>{currentIndex + 1}</h2>
+            <div className="flex flex-col">
+              <h3>{currentEvent.title}</h3>
+              {/* count down */}
+              <p>{countdown}</p>
+              <p className="desc-event">{currentEvent.desc}</p>
             </div>
-            <Image
-              width={200}
-              height={400}
-              src={event.image}
-              alt={event.title}
-              className="object-cover"
-            />
-            <div className="img-gradient" />
           </div>
-        ))}
+          <Image
+            width={200}
+            height={400}
+            src={currentEvent.image}
+            alt={currentEvent.title}
+            className="object-cover object-top"
+          />
+          <div className="img-gradient" />
+        </div>
+
+        <div className="utils-event">
+          <div className="left-utils">
+            {/* Fill */}
+            <div
+              className="h-full bg-white transition-all duration-500"
+              style={{ width: `${progressBar}%` }}
+            />
+
+            {/* Dot */}
+            <div
+              className="w-4 h-4 bg-white rounded-full absolute top-1/2 -translate-y-1/2 transition-all duration-500"
+              style={{ left: `calc(${progressBar}% - 8px)` }}
+            />
+          </div>
+          <div className="right-utils">
+            <h3>Know More</h3>
+            <div className="arrows">
+              <ArrowLeft
+                className="arrow"
+                onClick={() => gotToSlide(currentIndex - 1)}
+              />
+              <ArrowRight
+                className="arrow"
+                onClick={() => gotToSlide(currentIndex + 1)}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
