@@ -3,6 +3,7 @@ import Hero from "./component/Hero";
 import Navbar from "./component/Navbar";
 import About from "./component/About";
 import Events from "./component/Events";
+import Statue from "./component/Statue";
 export default function Home() {
   return (
     <main className="bg-image">
@@ -10,6 +11,7 @@ export default function Home() {
       <Hero />
       <About />
       <Events />
+      <Statue />
     </main>
   );
 }

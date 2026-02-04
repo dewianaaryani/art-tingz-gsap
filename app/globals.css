@@ -169,9 +169,11 @@ body {
     
     
     .statue-description {
-      @apply relative z-10 bg-black w-full text-lg text-white/80 leading-relaxed font-poppins-light p-8 md:pt-16 top-0 md:-top-24;
+      @apply relative z-10 bg-black w-full text-lg text-white/80 leading-relaxed font-poppins-light top-0 md:-top-24;
     } 
   }
+
+  
   #events {
     @apply min-h-screen h-screen max-h-screen flex flex-col justify-center p-8 md:px-20 py-18 gap-6 overflow-hidden;
     h1 {
@@ -220,4 +222,23 @@ body {
         @apply p-2 md:p-4 bg-white/20 backdrop-opacity-100 rounded-full size-8 md:size-12 hover:cursor-pointer hover:bg-white/30 transition-all duration-300 ease-in-out;
       }
   }
+  #statue-grid {
+    .gallery-wrap {
+      @apply relative w-full h-screen flex items-center justify-center overflow-hidden;
+    }
+    .gallery {
+      @apply relative w-full h-full flex-none;
+    }
+    .gallery__item {
+      @apply relative flex-none;
+    }
+  }
 }
+
+/* css element that cant inside the component for gsap to work */
+  .gallery--final.gallery--bento {
+    grid-template-columns: repeat(3, 100vw);
+    grid-template-rows: repeat(4, 49.5vh);
+    gap: 1vh;
+  }
+  
