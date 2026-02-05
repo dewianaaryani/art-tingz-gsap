@@ -100,7 +100,7 @@ body {
     }
   }
   #hero {
-  @apply min-h-screen md:h-screen  col-center  overflow-hidden;
+  @apply min-h-screen md:h-screen col-center overflow-hidden;
 
   
   .image-hero {
@@ -122,7 +122,7 @@ body {
     }
   }
   #about {
-    @apply h-fit max-h-screen relative items-center justify-center flex flex-col gap-12 w-full overflow-hidden px-0 md:px-16 pt-12;
+    @apply h-screen relative items-center justify-between flex flex-col gap-12 w-full overflow-hidden px-0 md:px-16 pt-12;
     .upper-content {
       @apply flex flex-col md:flex-row md:items-center gap-12 md:gap-18 w-full p-6;
     }
@@ -130,10 +130,17 @@ body {
       @apply relative flex z-10 text-large-max leading-tight tracking-wide max-w-sm md:max-w-md;
     }
     .statue-frame {
-    @apply relative flex-1 z-13 ml-auto md:ml-auto md:mr-auto max-w-3xs md:max-w-md lg:max-w-lg min-w-xs md:min-w-sm;
+    @apply relative flex justify-center items-center 
+         w-full max-w-lg mx-auto
+         min-h-[240px] sm:min-h-[320px] md:min-h-[380px] lg:min-h-[450px]
+         z-10;
       .statue-image {
-      @apply relative object-cover grayscale contrast-125 px-4 py-12 md:py-0;
+       @apply w-full aspect-[3/4] max-h-[600px] min-h-[300px];
+        canvas {
+          @apply touch-none;
+        }
       }
+
       .frame-line {
         @apply absolute bg-white/60;
       }
@@ -241,4 +248,3 @@ body {
     grid-template-rows: repeat(4, 49.5vh);
     gap: 1vh;
   }
-  

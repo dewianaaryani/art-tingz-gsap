@@ -1,4 +1,5 @@
 import React from "react";
+import Statue from "./three-drei/Statue";
 
 export default function About() {
   return (
@@ -8,11 +9,12 @@ export default function About() {
 
         {/* Image Frame */}
         <div className="statue-frame">
-          <img
+          {/* <img
             src="/images/about-img.png"
             alt="Classical marble statue"
             className="statue-image"
-          />
+          /> */}
+          <Statue />
           <span className="frame-line top" />
           <span className="frame-line right" />
           <span className="frame-line bottom" />
