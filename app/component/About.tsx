@@ -20,6 +20,10 @@ export default function About() {
           <span className="frame-line bottom" />
           <span className="frame-line left" />
         </div>
+        <div className="bg-box">
+          <span className="left-box" />
+          <span className="middle-box" />
+        </div>
       </div>
       {/* Description */}
       <div className="statue-description">
@@ -29,10 +33,6 @@ export default function About() {
           cultural heritage, and human expression — preserved in marble, bronze,
           and stone for generations to admire.
         </p>
-      </div>
-      <div className="bg-box">
-        <span className="left-box" />
-        <span className="middle-box" />
       </div>
     </section>
   );

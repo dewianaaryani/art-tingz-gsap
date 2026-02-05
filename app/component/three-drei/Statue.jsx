@@ -1,7 +1,13 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Bounds, useGLTF, Environment } from "@react-three/drei";
+import {
+  OrbitControls,
+  Bounds,
+  useGLTF,
+  Environment,
+  Center,
+} from "@react-three/drei";
 import * as THREE from "three";
 
 function Model() {
@@ -10,7 +16,7 @@ function Model() {
   scene.traverse((child) => {
     if (child.isMesh) {
       child.material = new THREE.MeshStandardMaterial({
-        color: "#f5f5f5",
+        color: "#9b968e",
         roughness: 0.4,
         metalness: 0,
       });
@@ -23,18 +29,20 @@ function Model() {
 export default function Statue() {
   return (
     <div className="statue-image">
-      <Canvas className="w-full h-full touch-none" camera={{ fov: 75 }}>
-        <Bounds fit margin={1.3}>
+      <Canvas
+        className="w-full h-full touch-none"
+        camera={{ position: [0, 1, 8], fov: 75 }}
+      >
+        <Center>
           <Model />
-        </Bounds>
-
+        </Center>
         <OrbitControls
           autoRotate
-          autoRotateSpeed={0.6}
+          autoRotateSpeed={0.5}
           enableZoom={false}
           enablePan={false}
-          enableDamping
-          dampingFactor={0.08}
+          minPolarAngle={Math.PI / 2.2}
+          maxPolarAngle={Math.PI / 2.2}
         />
 
         <Environment preset="city" />
@@ -44,6 +52,7 @@ export default function Statue() {
 
         {/* Fill Light (soft) */}
         <directionalLight position={[-3, 2, 2]} intensity={0.8} />
+        <directionalLight position={[-5, 3, -5]} intensity={0.6} />
 
         {/* Rim Light (back highlight) */}
         <spotLight
