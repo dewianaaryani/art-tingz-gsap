@@ -17,7 +17,7 @@ function Model() {
     if (child.isMesh) {
       child.material = new THREE.MeshStandardMaterial({
         color: "#9b968e",
-        roughness: 0.4,
+        roughness: 0.9,
         metalness: 0,
       });
     }
