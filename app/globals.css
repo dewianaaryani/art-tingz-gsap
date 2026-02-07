@@ -121,11 +121,17 @@ body {
         @apply relative flex z-10 text-large-max leading-tight tracking-wide max-w-sm md:max-w-md;
       }
       .statue-frame {
-        @apply relative flex justify-center items-center w-full mx-auto max-w-lg flex-1 min-h-0 shrink z-10 top-0 md:top-8 z-20 md:z-40;
+        @apply relative flex flex-col justify-center items-center w-full mx-auto max-w-lg flex-1 min-h-0 shrink top-0 md:top-8 z-20 md:z-40 gap-10;
         .statue-image {
           @apply relative w-full aspect-video max-h-full h-full;
           canvas {
-            @apply touch-none;
+            @apply touch-none cursor-pointer;
+          }
+        }
+        .element-hover {
+          @apply absolute flex uppercase text-base md:text-xl justify-center items-end w-full mx-auto gap-4 md:gap-8 bottom-6 md:bottom-8;
+          .arrows {
+            @apply size-8 backdrop-opacity-100;
           }
         }
       }

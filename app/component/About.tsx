@@ -5,7 +5,25 @@ import { useGSAP } from "@gsap/react";
 import gsap, { SplitText } from "gsap/all";
 
 export default function About() {
+  const statueRef = React.useRef<HTMLDivElement>(null);
+  const elementHoverRef = React.useRef<HTMLDivElement>(null);
   useGSAP(() => {
+    const statue = statueRef.current;
+    const elementHover = elementHoverRef.current;
+    if (!statue || !elementHover) return;
+
+    gsap.set(elementHover, { autoAlpha: 0 });
+    const show = gsap.to(elementHover, {
+      autoAlpha: 1,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+    const onEnter = () => show.play();
+    const onLeave = () => show.reverse();
+
+    statue.addEventListener("mouseenter", onEnter);
+    statue.addEventListener("mouseleave", onLeave);
+
     // Split title into multiple lines for line-by-line animation
     const splitTitle = new SplitText(".statue-title", {
       type: "lines",
@@ -88,17 +106,13 @@ export default function About() {
         },
         "-=0.6",
       );
-
-    // // 7️⃣ Description text
-    // .from(
-    //   ".statue-desc",
-    //   {
-    //     opacity: 0, // Fade in
-    //     y: 40, // Move up slightly
-    //     duration: 1,
-    //   },
-    //   "-=0.6",
-    // );
+    return () => {
+      statue.removeEventListener("mouseenter", onEnter);
+      statue.removeEventListener("mouseleave", onLeave);
+      show.kill();
+      tl.kill();
+      splitTitle.revert();
+    };
   });
 
   return (
@@ -107,13 +121,27 @@ export default function About() {
         <h1 className="statue-title">THE WORLD'S LEADING STATUE MUSEUM</h1>
 
         {/* Image Frame */}
-        <div className="statue-frame">
+        <div className="statue-frame" ref={statueRef}>
           {/* <img
             src="/images/about-img.png"
             alt="Classical marble statue"
             className="statue-image"
           /> */}
           <Statue />
+          <div className="element-hover" ref={elementHoverRef}>
+            <img
+              src="icons/arrow-left.svg"
+              alt="Arrows"
+              className="arrows rotate-12 md:rotate-14"
+            />
+            Rotate
+            <img
+              src="icons/arrow-right.svg"
+              alt="Arrows"
+              className="arrows -rotate-12 md:-rotate-14"
+            />
+          </div>
+          <div></div>
           <span className="frame-line top" />
           <span className="frame-line right" />
           <span className="frame-line bottom" />
