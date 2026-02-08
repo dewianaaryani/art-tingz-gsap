@@ -39,3 +39,40 @@ export const UpcomingEvents = [
     "image": "/images/event-image-5.png",
   }
 ];
+export const images = [
+  {
+    src: "/images/statue-img/1.jpg",
+    position: "object-top",
+  },
+  {
+    src: "/images/statue-img/2.jpg",
+    position: "object-center",
+  },
+  {
+    src: "/images/statue-img/5.png",
+    position: "object-bottom",
+  },
+  {
+    src: "/images/statue-img/3.jpg",
+    position: "object-top",
+  },
+  {
+    src: "/images/statue-img/4.png",
+    position: "object-center",
+  },
+  {
+    src: "/images/statue-img/8.jpg",
+    position: "object-bottom",
+  },
+  {
+    src: "/images/statue-img/6.jpg",
+    position: "object-top",
+  },
+  {
+    src: "/images/statue-img/7.png",
+    position: "object-center",
+  },
+];
+
+
+ 
