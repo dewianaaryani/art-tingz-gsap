@@ -2,12 +2,22 @@
 import React from "react";
 import Statue from "./three-drei/Statue";
 import { useGSAP } from "@gsap/react";
-import gsap, { SplitText } from "gsap/all";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import ScrollToPlugin from "gsap/ScrollToPlugin";
+import SplitText from "gsap/SplitText";
+
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 export default function About() {
+  const lockScroll = (lock: boolean) => {
+    document.body.style.overflow = lock ? "hidden" : "";
+  };
+
   const statueRef = React.useRef<HTMLDivElement>(null);
   const elementHoverRef = React.useRef<HTMLDivElement>(null);
   useGSAP(() => {
+    let hasJumped = false;
     const statue = statueRef.current;
     const elementHover = elementHoverRef.current;
     if (!statue || !elementHover) return;
@@ -32,11 +42,40 @@ export default function About() {
     // Create main GSAP timeline with ScrollTrigger
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: "#about", // Start animation when #about enters viewport
-        start: "top top", // When top of section hits top of screen
-        end: "=+180%", // When bottom of section hits bottom of screen
-        scrub: 1.2, // Sync animation with scroll (smooth delay)
-        pin: true, // Lock section while animating
+        trigger: "#about",
+        start: "top top",
+        end: "+=180%",
+        scrub: 0.6,
+        pin: true,
+
+        onUpdate(self) {
+          if (self.progress > 0.98 && !hasJumped) {
+            hasJumped = true;
+
+            const eventsEl = document.querySelector("#events");
+            if (!eventsEl) return;
+            // 🔒 Lock scroll before pin releases
+            lockScroll(true);
+
+            gsap.delayedCall(0.1, () => {
+              gsap.to(window, {
+                scrollTo: {
+                  y: eventsEl,
+                  autoKill: false,
+                },
+                duration: 1.4,
+                ease: "expo.inOut",
+                onComplete: () => {
+                  lockScroll(false);
+                },
+              });
+            });
+          }
+        },
+
+        onLeaveBack() {
+          hasJumped = false;
+        },
       },
 
       defaults: {
@@ -106,6 +145,27 @@ export default function About() {
         },
         "-=0.6",
       );
+    // AFTER timeline
+    // const eventsEl = document.querySelector("#events") as HTMLElement | null;
+    // if (!eventsEl) return;
+    // ScrollTrigger.create({
+    //   trigger: "#about",
+    //   start: "bottom bottom",
+    //   once: true,
+
+    //   onEnter: () => {
+    //     gsap.to(window, {
+    //       duration: 1.2,
+    //       ease: "power2.inOut",
+
+    //       scrollTo: {
+    //         y: eventsEl,
+    //         autoKill: false,
+    //       },
+    //     });
+    //   },
+    // });
+
     return () => {
       statue.removeEventListener("mouseenter", onEnter);
       statue.removeEventListener("mouseleave", onLeave);

@@ -62,11 +62,13 @@ export default function Events() {
         <div ref={eventRef} className="event-item">
           <div className="text-event-detail">
             <h2>{currentIndex + 1}</h2>
-            <div className="flex flex-col">
-              <h3>{currentEvent.title}</h3>
-              {/* count down */}
-              <p>{countdown}</p>
-              <p className="desc-event">{currentEvent.desc}</p>
+            <div className="flex flex-col md:gap-2">
+              <div>
+                <h3>{currentEvent.title}</h3>
+                {/* count down */}
+                <p className="desc-event">{currentEvent.desc}</p>
+              </div>
+              <p className="countdown">{countdown}</p>
             </div>
           </div>
           <Image
