@@ -40,10 +40,7 @@ export const UpcomingEvents = [
   }
 ];
 export const images = [
-  {
-    src: "/images/statue-img/1.jpg",
-    position: "object-top",
-  },
+  
   {
     src: "/images/statue-img/2.jpg",
     position: "object-center",
@@ -51,6 +48,10 @@ export const images = [
   {
     src: "/images/statue-img/5.png",
     position: "object-bottom",
+  },
+  {
+    src: "/images/statue-img/1.jpg",
+    position: "object-top",
   },
   {
     src: "/images/statue-img/3.jpg",

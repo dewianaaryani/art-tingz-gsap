@@ -38,7 +38,7 @@ const StatueGrid = () => {
       // Animate
       const flip = Flip.to(state, {
         simple: true,
-        ease: "expoScale(1, 5)",
+        ease: "expoScale(0.5, 2)",
         scale: true, // 🔥 important
       });
 
