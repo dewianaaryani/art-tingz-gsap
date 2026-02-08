@@ -1,17 +1,65 @@
 "use client";
 import { UpcomingEvents } from "@/constant";
+import { getCountdown, randomFutureDate } from "@/utils";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
 export default function Events() {
+  const [direction, setDirection] = useState(1); // 1 = right, -1 = left
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const eventRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [countdown, setCountdown] = useState("");
   const totalEvents = UpcomingEvents.length;
-  const gotToSlide = (index: number) => {
+  const gotToSlide = (index: number, dir: number) => {
+    if (isAnimating) return;
+
+    setIsAnimating(true);
+    setDirection(dir);
+
+    const el = eventRef.current;
+    if (!el) return;
+
     const newIndex = (index + totalEvents) % totalEvents;
-    setCurrentIndex(newIndex);
+
+    const offset = dir === 1 ? 120 : -120;
+
+    const tl = gsap.timeline({
+      defaults: { ease: "power3.inOut" },
+    });
+
+    // Slide OUT
+    tl.to(el, {
+      x: -offset,
+      opacity: 0,
+      duration: 0.4,
+    })
+
+      // Change content
+      .add(() => {
+        setCurrentIndex(newIndex);
+      })
+
+      // Prepare new slide
+      .set(el, {
+        x: offset,
+      })
+
+      // Slide IN
+      .to(el, {
+        x: 0,
+        opacity: 1,
+        duration: 0.5,
+        onComplete: () => {
+          setIsAnimating(false);
+        },
+      });
   };
+
   const getEventAt = (indexOffset: number) => {
     return UpcomingEvents[
       (currentIndex + indexOffset + totalEvents) % totalEvents
@@ -20,30 +68,6 @@ export default function Events() {
   const progressBar = ((currentIndex + 1) / totalEvents) * 100;
   const currentEvent = getEventAt(0);
   //upcoming random date but not more than 7 days
-  const randomFutureDate = () => {
-    const now = new Date();
-    const randomDays = Math.floor(Math.random() * 10) + 1; // 1–10 days
-    const randomHours = Math.floor(Math.random() * 24);
-
-    now.setDate(now.getDate() + randomDays);
-    now.setHours(now.getHours() + randomHours);
-
-    return now;
-  };
-  const getCountdown = (targetDate: Date): string => {
-    const now = new Date();
-    const diff = targetDate.getTime() - now.getTime();
-
-    if (diff <= 0) return "Event started";
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-    return `${days} days ${hours} hours remaining`;
-  };
-
-  const [countdown, setCountdown] = useState("");
 
   useEffect(() => {
     const eventDate = randomFutureDate();
@@ -72,12 +96,15 @@ export default function Events() {
             </div>
           </div>
           <Image
-            width={200}
-            height={400}
             src={currentEvent.image}
             alt={currentEvent.title}
+            fill
+            priority
+            quality={100}
+            sizes="(max-width: 768px) 100vw, 80vw"
             className="object-cover object-top"
           />
+
           <div className="img-gradient" />
         </div>
 
@@ -100,11 +127,11 @@ export default function Events() {
             <div className="arrows">
               <ArrowLeft
                 className="arrow"
-                onClick={() => gotToSlide(currentIndex - 1)}
+                onClick={() => gotToSlide(currentIndex - 1, -1)}
               />
               <ArrowRight
                 className="arrow"
-                onClick={() => gotToSlide(currentIndex + 1)}
+                onClick={() => gotToSlide(currentIndex + 1, 1)}
               />
             </div>
           </div>

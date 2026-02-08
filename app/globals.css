@@ -175,14 +175,14 @@ body {
   }
 
   #events {
-    @apply min-h-screen h-screen max-h-screen flex flex-col justify-center p-8 md:px-20 py-18 gap-6 overflow-hidden;
+    @apply min-h-screen h-screen max-h-screen flex flex-col justify-center p-8 md:px-20 py-18 gap-6 md:gap-10 overflow-hidden;
     h1 {
       @apply text-large-max underline-offset-2 md:underline;
     }
     .event-section {
-      @apply flex flex-col gap-4 w-full uppercase;
+      @apply flex flex-col gap-4 w-full uppercase overflow-hidden;
       .event-item {
-        @apply relative w-full h-62 md:h-120 overflow-hidden;
+        @apply relative w-full h-62 md:h-150 overflow-hidden;
       }
       .text-event-detail {
         @apply absolute bottom-0 left-0 z-10 flex flex-row items-center gap-4 md:gap-8 p-8 md:p-10  w-full md:max-w-4xl;
