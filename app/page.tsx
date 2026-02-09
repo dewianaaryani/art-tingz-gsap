@@ -8,17 +8,24 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { Flip } from "gsap/all";
+import { Draggable, Flip } from "gsap/all";
+import Artist from "./component/Artist";
+import CardGallery from "./component/CardGallery";
 
-gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin);
+gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Draggable);
 export default function Home() {
   return (
     <main className="bg-image">
       <Navbar />
       <Hero />
-      <About />
-      <Events />
+      <div>
+        <About />
+        <Events />
+      </div>
+
       <Statue />
+
+      <Artist />
     </main>
   );
 }

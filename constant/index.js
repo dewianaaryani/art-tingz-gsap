@@ -75,5 +75,15 @@ export const images = [
   },
 ];
 
+ export const artistImages = [
+    "https://assets.codepen.io/16327/portrait-number-01.png",
+    "https://assets.codepen.io/16327/portrait-number-02.png",
+    "https://assets.codepen.io/16327/portrait-number-03.png",
+    "https://assets.codepen.io/16327/portrait-number-04.png",
+    "https://assets.codepen.io/16327/portrait-number-05.png",
+    "https://assets.codepen.io/16327/portrait-number-06.png",
+    "https://assets.codepen.io/16327/portrait-number-07.png",
+  ];
+
 
  
