@@ -5,8 +5,9 @@ import gsap from "gsap";
 import { Draggable } from "gsap/all";
 import { useGSAP } from "@gsap/react";
 import { artistImages } from "@/constant";
+import ScrollTrigger from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(Draggable);
+gsap.registerPlugin(Draggable, ScrollTrigger);
 
 export default function ArtistCard() {
   const [activeReal, setActiveReal] = useState(0);
@@ -43,6 +44,28 @@ export default function ArtistCard() {
     let currentIndex = 0;
 
     /* ------------------ Helpers ------------------ */
+    // ===== NAME ANIMATION (SMOOTH) =====
+    const animateName = () => {
+      const nameEl = document.querySelector(".artist-name");
+      if (!nameEl) return;
+
+      gsap.killTweensOf(nameEl); // prevent stacking
+
+      gsap.fromTo(
+        nameEl,
+        {
+          y: 12,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.45,
+          ease: "power2.out",
+          clearProps: "all",
+        },
+      );
+    };
 
     const getItemSize = () => {
       const first = cards[0];
@@ -121,6 +144,10 @@ export default function ArtistCard() {
         ((currentIndex % baseLength) + baseLength) % baseLength;
       setActive(normalized);
       setActiveReal(currentIndex);
+
+      requestAnimationFrame(() => {
+        animateName();
+      });
     };
 
     /* ------------------ Init ------------------ */
@@ -135,49 +162,92 @@ export default function ArtistCard() {
           }),
       ),
     );
-
-    waitImages.then(() => {
-      build();
-
-      // Start in the middle copy
-      const startIndex = baseLength * Math.floor(COPIES / 2);
-      currentIndex = startIndex;
-
-      gsap.set(track, { x: indexToX(startIndex) });
-      centerCard(startIndex);
-
-      /* ------------------ Draggable ------------------ */
-      const [draggable] = Draggable.create(track, {
-        type: "x",
-        inertia: true,
-
-        onRelease() {
-          // Use this.x (Draggable's own tracked x) for accuracy on release
-          centerCard(xToIndex(this.x));
-        },
-
-        onThrowComplete() {
-          centerCard(xToIndex(gsap.getProperty(track, "x") as number));
-        },
-      });
-
-      draggableInstance = draggable;
+    // ===== ENTRY ANIMATION =====
+    gsap.set("#artists", {
+      opacity: 0,
+      y: 120,
     });
 
-    /* ------------------ Resize ------------------ */
-    const resize = () => {
-      build();
-      gsap.set(track, { x: indexToX(currentIndex) });
-      animateCards(currentIndex);
-      draggableInstance?.update();
-    };
+    gsap.set(cards, {
+      scale: 0.85,
+      opacity: 0,
+      filter: "blur(3px)", // was 8px
+    });
 
-    window.addEventListener("resize", resize);
+    const introTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#artists",
+        start: "top 75%",
+        toggleActions: "play none none reverse",
+      },
+    });
 
-    return () => {
-      draggableInstance?.kill();
-      window.removeEventListener("resize", resize);
-    };
+    introTl
+      .to("#artists", {
+        opacity: 1,
+        y: 0,
+        duration: 1.1,
+        ease: "power4.out",
+      })
+      .to(
+        cards,
+        {
+          opacity: 0.5,
+          scale: 0.85,
+          filter: "brightness(0.6) blur(0px)",
+          duration: 0.9,
+          ease: "power3.out",
+        },
+        "-=0.6",
+      );
+
+    waitImages.then(() => {
+      introTl?.eventCallback("onComplete", () => {
+        build();
+
+        // Start in the middle copy
+        const startIndex = baseLength * Math.floor(COPIES / 2);
+        currentIndex = startIndex;
+
+        gsap.set(track, { x: indexToX(startIndex) });
+        // First highlight (after intro)
+        gsap.delayedCall(0.4, () => {
+          centerCard(startIndex);
+        });
+
+        /* ------------------ Draggable ------------------ */
+        const [draggable] = Draggable.create(track, {
+          type: "x",
+          inertia: true,
+
+          onRelease() {
+            // Use this.x (Draggable's own tracked x) for accuracy on release
+            centerCard(xToIndex(this.x));
+          },
+
+          onThrowComplete() {
+            centerCard(xToIndex(gsap.getProperty(track, "x") as number));
+          },
+        });
+
+        draggableInstance = draggable;
+      });
+
+      /* ------------------ Resize ------------------ */
+      const resize = () => {
+        build();
+        gsap.set(track, { x: indexToX(currentIndex) });
+        animateCards(currentIndex);
+        draggableInstance?.update();
+      };
+
+      window.addEventListener("resize", resize);
+
+      return () => {
+        draggableInstance?.kill();
+        window.removeEventListener("resize", resize);
+      };
+    });
   }, []);
 
   return (
@@ -233,7 +303,7 @@ export default function ArtistCard() {
               {activeReal === i && (
                 <div className="absolute bottom-4 md:bottom-8 left-0 w-full text-center">
                   <p
-                    className="uppercase text-2xl md:text-3xl lg:text-5xl tracking-widest text-white font-semibold"
+                    className="artist-name uppercase text-2xl md:text-3xl lg:text-5xl tracking-widest text-white font-semibold"
                     style={{
                       textShadow: `
         0 0 10px rgba(255,255,255,0.8),
