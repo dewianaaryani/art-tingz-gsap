@@ -62,7 +62,7 @@ export default function ArtistCard() {
           opacity: 1,
           duration: 0.45,
           ease: "power2.out",
-          clearProps: "all",
+          // clearProps: "all",
         },
       );
     };
@@ -171,7 +171,6 @@ export default function ArtistCard() {
     gsap.set(cards, {
       scale: 0.85,
       opacity: 0,
-      filter: "blur(3px)", // was 8px
     });
 
     const introTl = gsap.timeline({
@@ -194,7 +193,7 @@ export default function ArtistCard() {
         {
           opacity: 0.5,
           scale: 0.85,
-          filter: "brightness(0.6) blur(0px)",
+          filter: "brightness(0.6) ",
           duration: 0.9,
           ease: "power3.out",
         },
