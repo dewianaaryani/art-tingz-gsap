@@ -87,11 +87,11 @@ export const images = [
     image: "/images/artists/3.png",
     position: "object-center",
   },
-  {
+    {
     name: "Pandora",
     image: "/images/artists/4.png",
     position: "object-center",
-  }  
+  }  ,
   ];
 
 
