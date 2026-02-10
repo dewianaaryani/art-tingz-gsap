@@ -8,76 +8,56 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
 export default function Events() {
-  const [direction, setDirection] = useState(1); // 1 = right, -1 = left
   const [isAnimating, setIsAnimating] = useState(false);
-
-  const eventRef = useRef(null);
+  const eventRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [countdown, setCountdown] = useState("");
   const totalEvents = UpcomingEvents.length;
+
+  // FIX: Generate the date once and store it in a ref so it doesn't
+  // regenerate on every render / remount, which caused countdown to reset.
+  const eventDateRef = useRef<Date | null>(null);
+  if (!eventDateRef.current) {
+    eventDateRef.current = randomFutureDate();
+  }
+
   const gotToSlide = (index: number, dir: number) => {
     if (isAnimating) return;
-
     setIsAnimating(true);
-    setDirection(dir);
 
     const el = eventRef.current;
     if (!el) return;
 
     const newIndex = (index + totalEvents) % totalEvents;
-
     const offset = dir === 1 ? 120 : -120;
 
-    const tl = gsap.timeline({
-      defaults: { ease: "power3.inOut" },
-    });
+    const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
 
-    // Slide OUT
-    tl.to(el, {
-      x: -offset,
-      opacity: 0,
-      duration: 0.4,
-    })
-
-      // Change content
-      .add(() => {
-        setCurrentIndex(newIndex);
-      })
-
-      // Prepare new slide
-      .set(el, {
-        x: offset,
-      })
-
-      // Slide IN
+    tl.to(el, { x: -offset, opacity: 0, duration: 0.4 })
+      .add(() => setCurrentIndex(newIndex))
+      .set(el, { x: offset })
       .to(el, {
         x: 0,
         opacity: 1,
         duration: 0.5,
-        onComplete: () => {
-          setIsAnimating(false);
-        },
+        onComplete: () => setIsAnimating(false),
       });
   };
 
-  const getEventAt = (indexOffset: number) => {
-    return UpcomingEvents[
-      (currentIndex + indexOffset + totalEvents) % totalEvents
-    ];
-  };
+  const getEventAt = (indexOffset: number) =>
+    UpcomingEvents[(currentIndex + indexOffset + totalEvents) % totalEvents];
+
   const progressBar = ((currentIndex + 1) / totalEvents) * 100;
   const currentEvent = getEventAt(0);
-  //upcoming random date but not more than 7 days
 
   useEffect(() => {
-    const eventDate = randomFutureDate();
-
     const interval = setInterval(() => {
-      setCountdown(getCountdown(eventDate));
+      if (eventDateRef.current) {
+        setCountdown(getCountdown(eventDateRef.current));
+      }
     }, 1000);
-
     return () => clearInterval(interval);
-  }, []);
+  }, []); // stable — no deps that change
 
   return (
     <section id="events">
@@ -89,7 +69,6 @@ export default function Events() {
             <div className="flex flex-col md:gap-2">
               <div>
                 <h3>{currentEvent.title}</h3>
-                {/* count down */}
                 <p className="desc-event">{currentEvent.desc}</p>
               </div>
               <p className="countdown">{countdown}</p>
@@ -104,19 +83,15 @@ export default function Events() {
             sizes="(max-width: 768px) 100vw, 80vw"
             className="object-cover object-top"
           />
-
           <div className="img-gradient" />
         </div>
 
         <div className="utils-event">
           <div className="left-utils">
-            {/* Fill */}
             <div
               className="h-full bg-white transition-all duration-500"
               style={{ width: `${progressBar}%` }}
             />
-
-            {/* Dot */}
             <div
               className="w-4 h-4 bg-white rounded-full absolute top-1/2 -translate-y-1/2 transition-all duration-500"
               style={{ left: `calc(${progressBar}% - 8px)` }}
