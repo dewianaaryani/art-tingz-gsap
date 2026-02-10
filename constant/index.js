@@ -76,13 +76,22 @@ export const images = [
 ];
 
  export const artistImages = [
-    "https://assets.codepen.io/16327/portrait-number-01.png",
-    "https://assets.codepen.io/16327/portrait-number-02.png",
-    "https://assets.codepen.io/16327/portrait-number-03.png",
-    "https://assets.codepen.io/16327/portrait-number-04.png",
-    "https://assets.codepen.io/16327/portrait-number-05.png",
-    "https://assets.codepen.io/16327/portrait-number-06.png",
-    "https://assets.codepen.io/16327/portrait-number-07.png",
+  
+  {
+    name: "Lysippus",
+    image: "/images/artists/2.png",
+    position: "object-center",
+  },
+  {
+    name: "Sophocles",
+    image: "/images/artists/3.png",
+    position: "object-center",
+  },
+  {
+    name: "Pandora",
+    image: "/images/artists/4.png",
+    position: "object-center",
+  }  
   ];
 
 

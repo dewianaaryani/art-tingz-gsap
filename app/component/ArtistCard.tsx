@@ -4,21 +4,12 @@ import { useRef, useState } from "react";
 import gsap from "gsap";
 import { Draggable } from "gsap/all";
 import { useGSAP } from "@gsap/react";
+import { artistImages } from "@/constant";
 
 gsap.registerPlugin(Draggable);
 
-const images = [
-  "https://assets.codepen.io/16327/portrait-number-01.png",
-  "https://assets.codepen.io/16327/portrait-number-02.png",
-  "https://assets.codepen.io/16327/portrait-number-03.png",
-  "https://assets.codepen.io/16327/portrait-number-04.png",
-  "https://assets.codepen.io/16327/portrait-number-05.png",
-  "https://assets.codepen.io/16327/portrait-number-06.png",
-  "https://assets.codepen.io/16327/portrait-number-07.png",
-];
-
 export default function ArtistCard() {
-  const loopImages = [...images, ...images, ...images];
+  const loopImages = [...artistImages, ...artistImages, ...artistImages];
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -50,7 +41,7 @@ export default function ArtistCard() {
 
     let itemSize = getItemSize();
 
-    const baseLength = images.length; // 7
+    const baseLength = artistImages.length; // 7
     const totalItems = baseLength * 3;
     const totalWidth = totalItems * itemSize;
 
@@ -197,30 +188,43 @@ export default function ArtistCard() {
           ref={trackRef}
           className="flex items-center absolute top-1/2 -translate-y-1/2 gap-6 md:gap-8 lg:gap-10"
         >
-          {loopImages.map((img, i) => (
+          {loopImages.map((artist, i) => (
             <div
               key={i}
               className="artist-card
-    relative
-    shrink-0
-    w-45 h-65
-    md:w-55 md:h-75
-    lg:w-65 lg:h-85"
+                relative
+                shrink-0
+                overflow-hidden
+                w-45 h-65
+                md:w-55 md:h-75
+                lg:w-65 lg:h-85
+                rounded-lg"
             >
               {/* Image */}
               <img
-                src={img}
-                alt="artist"
-                className="w-full h-full object-cover rounded-lg"
+                src={artist.image}
+                alt={artist.name}
+                className={`w-full h-full object-cover rounded-lg ${artist.position}`}
                 draggable={false}
+              />
+              {/* Noise Overlay */}
+              <img
+                src="/images/noise.png"
+                alt=""
+                className="
+                  absolute inset-0
+                  w-full h-full
+                  object-cover
+                  opacity-45
+                  mix-blend-overlay
+                  pointer-events-none
+                "
               />
 
               {/* Name */}
-              {active === i % images.length && (
+              {active === i % artistImages.length && (
                 <div className="absolute bottom-4 left-0 w-full text-center">
-                  <p className="text-white text-lg font-semibold tracking-wide">
-                    PHIDIAS OF ATHENS
-                  </p>
+                  <p className="">{artist.name}</p>
                 </div>
               )}
             </div>
