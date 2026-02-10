@@ -98,9 +98,9 @@ export default function CardGallery() {
   }, []);
 
   return (
-    <section className="w-full h-screen bg-black flex flex-col items-center justify-center overflow-hidden">
+    <section className="" id="artists">
       {/* Title */}
-      <h2 className="text-white text-3xl tracking-widest mb-12">THE ARTIST</h2>
+      <h2>THE ARTIST</h2>
 
       {/* Wrapper */}
       <div

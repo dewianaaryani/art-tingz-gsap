@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { Draggable } from "gsap/all";
 import { useGSAP } from "@gsap/react";
@@ -25,17 +25,30 @@ export default function ArtistCard() {
 
   const [active, setActive] = useState(0);
 
-  const cardWidth = 260;
-  const gap = 40;
-
   useGSAP(() => {
     if (!wrapperRef.current || !trackRef.current) return;
 
     const track = trackRef.current;
 
-    const cardWidth = 260;
-    const gap = 40;
-    const itemSize = cardWidth + gap;
+    const getItemSize = () => {
+      const track = trackRef.current;
+
+      if (!track) return 300;
+
+      const first = track.querySelector(".artist-card") as HTMLElement | null;
+
+      if (!first) return 300;
+
+      const gap = parseFloat(
+        window.getComputedStyle(track).columnGap ||
+          window.getComputedStyle(track).gap ||
+          "0",
+      );
+
+      return first.offsetWidth + gap;
+    };
+
+    let itemSize = getItemSize();
 
     const baseLength = images.length; // 7
     const totalItems = baseLength * 3;
@@ -45,8 +58,22 @@ export default function ArtistCard() {
     const startIndex = baseLength;
 
     let activeIndex = startIndex;
+    const getCardWidth = () => {
+      const track = trackRef.current;
 
-    const getCenterX = () => window.innerWidth / 2 - cardWidth / 2;
+      if (!track) return 200;
+
+      const first = track.querySelector(".artist-card") as HTMLElement | null;
+
+      if (!first) return 200;
+
+      return first.offsetWidth;
+    };
+
+    const getCenterX = () => {
+      const width = getCardWidth();
+      return window.innerWidth / 2 - width / 2;
+    };
 
     // Wrap inside middle set
     const wrapX = gsap.utils.wrap(
@@ -138,6 +165,7 @@ export default function ArtistCard() {
 
     // Handle resize
     const handleResize = () => {
+      itemSize = getItemSize();
       centerCard(activeIndex);
     };
 
@@ -158,29 +186,26 @@ export default function ArtistCard() {
   }, []);
 
   return (
-    <section className="w-full h-screen bg-black flex flex-col items-center justify-center overflow-hidden">
+    <section id="artists">
       {/* Title */}
-      <h2 className="text-white text-3xl tracking-widest mb-12">THE ARTIST</h2>
+      <h2>THE ARTIST</h2>
 
       {/* Wrapper */}
-      <div
-        ref={wrapperRef}
-        className="relative w-full h-[420px] overflow-hidden"
-      >
+      <div ref={wrapperRef} className="relative w-full h-105 overflow-hidden">
         {/* Track */}
         <div
           ref={trackRef}
-          className="flex items-center absolute top-1/2 -translate-y-1/2"
-          style={{ gap: `${gap}px` }}
+          className="flex items-center absolute top-1/2 -translate-y-1/2 gap-6 md:gap-8 lg:gap-10"
         >
           {loopImages.map((img, i) => (
             <div
               key={i}
-              className="artist-card relative flex-shrink-0"
-              style={{
-                width: cardWidth,
-                height: 340,
-              }}
+              className="artist-card
+    relative
+    shrink-0
+    w-45 h-65
+    md:w-55 md:h-75
+    lg:w-65 lg:h-85"
             >
               {/* Image */}
               <img
@@ -191,7 +216,7 @@ export default function ArtistCard() {
               />
 
               {/* Name */}
-              {active === i && (
+              {active === i % images.length && (
                 <div className="absolute bottom-4 left-0 w-full text-center">
                   <p className="text-white text-lg font-semibold tracking-wide">
                     PHIDIAS OF ATHENS
